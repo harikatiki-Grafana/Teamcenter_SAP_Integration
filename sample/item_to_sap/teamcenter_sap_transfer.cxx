@@ -15,6 +15,7 @@
 
 extern "C" {
 #include <tc/tc.h>
+#include <tc/tc_util.h>
 #include <tccore/item.h>
 #include <tccore/aom.h>
 }
@@ -160,9 +161,20 @@ static int transfer(const char* itemId) {
     return ITK_ok;
 }
 
-int main(int argc,char** argv) {
+int ITK_user_main(int argc, char** argv) {
     if(argc!=2){ std::cerr<<"Usage: teamcenter_sap_transfer <ITEM_ID>\\n"; return 2; }
-    if(TC_init_module(nullptr)!=ITK_ok){ std::cerr<<"TC_init_module failed\\n"; return 1; }
-    try { int r=transfer(argv[1]); TC_exit_module(true); return r; }
-    catch(const std::exception& e){ std::cerr<<"Transfer failed: "<<e.what()<<"\\n"; TC_exit_module(false); return 1; }
+
+    // Use Teamcenter-managed command-line/environment authentication.
+    // Never hard-code Teamcenter credentials.
+    if(TC_auto_login()!=ITK_ok){ std::cerr<<"Teamcenter auto-login failed\\n"; return 1; }
+
+    try {
+        int r=transfer(argv[1]);
+        ITK_exit_module(true);
+        return r;
+    } catch(const std::exception& e) {
+        std::cerr<<"Transfer failed: "<<e.what()<<"\\n";
+        ITK_exit_module(false);
+        return 1;
+    }
 }
