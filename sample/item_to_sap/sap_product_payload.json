@@ -1,0 +1,17 @@
+{
+  "Product": "TC-100001",
+  "ProductType": "FERT",
+  "BaseUnit": "PC",
+  "GrossWeight": "10.000",
+  "NetWeight": "9.500",
+  "WeightUnit": "KG",
+  "to_Description": {
+    "results": [
+      {
+        "Product": "TC-100001",
+        "Language": "EN",
+        "ProductDescription": "Teamcenter sample product"
+      }
+    ]
+  }
+}
